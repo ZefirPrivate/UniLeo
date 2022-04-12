@@ -27,6 +27,28 @@ namespace Voody.UniLeo
                 instantiateEntity.Replace(instantiateComponent);
             }
         }
+		
+		public void Convert()
+        {
+            var world = WorldHandler.GetWorld();
+			if(world != null)
+            {
+				EcsEntity entity = world.NewEntity();
+
+				foreach (var component in gameObject.GetComponents<Component>())
+				{
+					if (component is IConvertToEntity entityComponent)
+					{
+						// Adding Component to entity
+						entityComponent.Convert(entity);
+						GameObject.Destroy(component);
+					}
+				}
+
+				Set(entity);
+				setProccessed();
+			}
+        }
 
         public EcsEntity? TryGetEntity()
         {
